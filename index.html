@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro</title>
+  <title>Meu Controle Financeiro v4.2</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -130,6 +130,30 @@
               <img src="assets/icons/plus(1).svg" alt="" /> Adicionar
             </button>
           </div>
+          <div class="month-bar">
+            <button class="month-arrow" id="prevMonthBtn" aria-label="Mês anterior">‹</button>
+            <div class="month-center">
+              <span id="monthYearLabel">Abril 2026</span>
+              <small id="monthSummaryLabel">Resumo do mês</small>
+            </div>
+            <button class="month-arrow" id="nextMonthBtn" aria-label="Próximo mês">›</button>
+          </div>
+
+          <div class="month-overview">
+            <div>
+              <span>Entradas</span>
+              <strong class="income" id="monthIncomeValue">R$ 0,00</strong>
+            </div>
+            <div>
+              <span>Saídas</span>
+              <strong class="expense" id="monthExpenseValue">R$ 0,00</strong>
+            </div>
+            <div>
+              <span>Saldo</span>
+              <strong id="monthBalanceValue">R$ 0,00</strong>
+            </div>
+          </div>
+
           <div class="filters">
             <button class="filter active" data-filter="Todos">Todos</button>
             <button class="filter" data-filter="Receita">Receitas</button>

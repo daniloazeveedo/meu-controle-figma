@@ -18,6 +18,7 @@ const defaultState = {
 
 let state = loadState();
 let currentFilter = "Todos";
+let currentMonth = new Date().toISOString().slice(0,7);
 let currentType = "Despesa";
 
 function loadState(){
@@ -41,8 +42,20 @@ function maybe(value){
   return state.hideValues ? "R$ ••••" : brl(value);
 }
 
-function getMonthTransactions(){
-  return state.transactions;
+function getMonthTransactions(month = currentMonth){
+  return state.transactions.filter(t => String(t.date || '').slice(0,7) === month);
+}
+
+function shiftMonth(month, delta){
+  const [year, monthIndex] = month.split('-').map(Number);
+  const date = new Date(year, monthIndex - 1 + delta, 1);
+  return date.toISOString().slice(0,7);
+}
+
+function monthLabel(month){
+  const [year, monthIndex] = month.split('-').map(Number);
+  const date = new Date(year, monthIndex - 1, 1);
+  return date.toLocaleDateString('pt-BR', { month:'long', year:'numeric' }).replace(/^./, c => c.toUpperCase());
 }
 
 function totals(){
@@ -85,11 +98,23 @@ function render(){
 }
 
 function renderTransactions(){
+  const monthTransactions = getMonthTransactions();
   const recent = [...state.transactions].sort((a,b) => b.date.localeCompare(a.date));
-  const filtered = currentFilter === "Todos" ? recent : recent.filter(t => t.type === currentFilter);
+  const monthSorted = [...monthTransactions].sort((a,b) => b.date.localeCompare(a.date));
+  const filtered = currentFilter === "Todos" ? monthSorted : monthSorted.filter(t => t.type === currentFilter);
+
+  const monthIncome = monthTransactions.filter(t => t.type === "Receita").reduce((a,b) => a + Number(b.amount), 0);
+  const monthExpense = monthTransactions.filter(t => t.type === "Despesa").reduce((a,b) => a + Number(b.amount), 0);
+  const monthBalance = monthIncome - monthExpense;
+
+  if($("#monthYearLabel")) $("#monthYearLabel").textContent = monthLabel(currentMonth);
+  if($("#monthIncomeValue")) $("#monthIncomeValue").textContent = maybe(monthIncome);
+  if($("#monthExpenseValue")) $("#monthExpenseValue").textContent = maybe(monthExpense);
+  if($("#monthBalanceValue")) $("#monthBalanceValue").textContent = maybe(monthBalance);
+  if($("#monthSummaryLabel")) $("#monthSummaryLabel").textContent = `${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`;
 
   $("#recentTransactions").innerHTML = recent.slice(0,5).map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento ainda.");
-  $("#allTransactions").innerHTML = filtered.map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento encontrado.");
+  $("#allTransactions").innerHTML = filtered.map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento encontrado neste mês.");
 
   $$("[data-delete]").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -269,6 +294,16 @@ $("#settingsHideValues").addEventListener("click", () => {
   state.hideValues = !state.hideValues;
   saveState();
   render();
+});
+
+$("#prevMonthBtn")?.addEventListener("click", () => {
+  currentMonth = shiftMonth(currentMonth, -1);
+  renderTransactions();
+});
+
+$("#nextMonthBtn")?.addEventListener("click", () => {
+  currentMonth = shiftMonth(currentMonth, 1);
+  renderTransactions();
 });
 
 $("#exportData").addEventListener("click", () => {

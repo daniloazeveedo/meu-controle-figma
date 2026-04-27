@@ -22,3 +22,9 @@ Estrutura principal:
 - app.js
 - manifest.webmanifest
 - assets/
+
+
+## v4.2
+- Adicionada barra de meses na tela de lançamentos.
+- Filtro de lançamentos por mês.
+- Resumo mensal com entradas, saídas e saldo.
