@@ -1550,3 +1550,7 @@ input:focus,select:focus{
     padding-right:28px;
   }
 }
+
+.month-strip-summary{
+  display: none !important;
+}
