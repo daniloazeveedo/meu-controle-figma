@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.6</title>
+  <title>Meu Controle Financeiro v4.7</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -323,7 +323,8 @@
       </label>
 
       <label>Data
-        <input name="date" type="date" id="transactionDate" required />
+        <input name="date" type="hidden" id="transactionDate" required />
+        <input type="text" id="transactionDateDisplay" readonly required />
       </label>
 
       <button class="primary-action submit" type="submit">Salvar</button>
