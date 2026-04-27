@@ -1,23 +1,24 @@
-# Meu Controle — v4.0 Figma Exact
+# Meu Controle Web v4.1
 
-Esta versão foi feita para ficar visualmente igual ao arquivo exportado do Figma.
+Página web funcional de controle financeiro usando os assets, logo e paleta do projeto Figma.
 
-## Como funciona
-- As telas SVG exportadas do Figma são usadas diretamente como imagem.
-- Hotspots invisíveis ficam por cima para navegação.
-- Isso garante fidelidade visual máxima em relação ao Figma.
-
-## Telas incluídas
-- Splash
-- Login
-- Home Empty
-- Home
-- Novo lançamento
+## Funcionalidades
+- Dashboard com saldo, entradas e saídas
+- Cadastro de receitas e despesas
+- Lista de lançamentos
 - Orçamento mensal
+- Categorias
+- Ocultar valores
+- Exportar backup em JSON
+- Layout responsivo para desktop e celular
+- Uso de assets SVG do Figma
 
-## Atalhos
-- Pressione `D` no teclado para mostrar/ocultar áreas clicáveis de debug.
-- Pressione `Esc` para voltar para Home.
+## Como subir no GitHub
+Suba todos os arquivos e pastas deste ZIP no repositório.
 
-## Observação
-Para alterar textos/posições de forma 100% editável depois, o ideal é fazer uma segunda etapa convertendo cada tela SVG em componentes HTML/SwiftUI. Esta versão prioriza ficar exatamente igual ao Figma.
+Estrutura principal:
+- index.html
+- style.css
+- app.js
+- manifest.webmanifest
+- assets/

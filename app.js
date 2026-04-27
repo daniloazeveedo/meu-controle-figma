@@ -1,241 +1,284 @@
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-const FRAME = { w: 390, h: 844 };
+const STORAGE_KEY = "meuControleFigmaWebV41";
 
-const screens = {
-  splash: "assets/screens/splash.svg",
-  login: "assets/screens/login.svg",
-  homeEmpty: "assets/screens/homeEmpty.svg",
-  home: "assets/screens/home.svg",
-  newTransaction: "assets/screens/newTransaction.svg",
-  budget: "assets/screens/budget.svg",
+const defaultState = {
+  hideValues:false,
+  budget:1200,
+  categories:["Alimentação","Transporte","Salário","Lazer","Casa","Saúde"],
+  transactions:[
+    { id: crypto.randomUUID(), type:"Receita", description:"Salário", amount:2200, category:"Salário", date:"2026-04-15" },
+    { id: crypto.randomUUID(), type:"Receita", description:"Vale", amount:1022, category:"Salário", date:"2026-04-10" },
+    { id: crypto.randomUUID(), type:"Despesa", description:"Mercado", amount:220.5, category:"Alimentação", date:"2026-04-17" },
+    { id: crypto.randomUUID(), type:"Despesa", description:"Combustível", amount:150, category:"Transporte", date:"2026-04-16" },
+    { id: crypto.randomUUID(), type:"Despesa", description:"Internet", amount:99.9, category:"Casa", date:"2026-04-05" }
+  ]
 };
 
-let currentScreen = "splash";
-let hasTransactions = localStorage.getItem("mc_figma_has_transactions") === "1";
+let state = loadState();
+let currentFilter = "Todos";
+let currentType = "Despesa";
 
-const image = document.getElementById("screenImage");
-const hotspotLayer = document.getElementById("hotspots");
-const stage = document.getElementById("screenStage");
-
-function toPct(value, axis){
-  return `${(value / axis) * 100}%`;
-}
-
-function makeHotspot({ x, y, w, h, label, action, debug = false }){
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = `hotspot ${debug ? "debug" : ""}`;
-  btn.setAttribute("aria-label", label || "Ação");
-  btn.style.left = toPct(x, FRAME.w);
-  btn.style.top = toPct(y, FRAME.h);
-  btn.style.width = toPct(w, FRAME.w);
-  btn.style.height = toPct(h, FRAME.h);
-  btn.addEventListener("click", action);
-  hotspotLayer.appendChild(btn);
-}
-
-function clearHotspots(){
-  hotspotLayer.innerHTML = "";
-}
-
-function showToast(message){
-  let toast = document.querySelector(".toast");
-  if(!toast){
-    toast = document.createElement("div");
-    toast.className = "toast";
-    stage.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 1800);
-}
-
-function openScreen(name){
-  currentScreen = name;
-  image.src = screens[name];
-  image.alt = `Tela ${name}`;
-  renderHotspots();
-}
-
-function renderHotspots(){
-  clearHotspots();
-
-  if(currentScreen === "splash"){
-    makeHotspot({
-      x: 0, y: 0, w: 390, h: 844,
-      label: "Ir para login",
-      action: () => openScreen("login")
-    });
-  }
-
-  if(currentScreen === "login"){
-    // Botão Entrar
-    makeHotspot({
-      x: 44, y: 652, w: 302, h: 47,
-      label: "Entrar",
-      action: () => openScreen(hasTransactions ? "home" : "homeEmpty")
-    });
-  }
-
-  if(currentScreen === "homeEmpty"){
-    // Logout
-    makeHotspot({
-      x: 338, y: 65, w: 36, h: 36,
-      label: "Sair",
-      action: () => openScreen("login")
-    });
-
-    // Setas mês
-    makeHotspot({
-      x: 20, y: 154, w: 42, h: 42,
-      label: "Mês anterior",
-      action: () => showToast("Mês anterior")
-    });
-
-    makeHotspot({
-      x: 330, y: 154, w: 42, h: 42,
-      label: "Próximo mês",
-      action: () => showToast("Próximo mês")
-    });
-
-    // Configuração do orçamento
-    makeHotspot({
-      x: 332, y: 257, w: 38, h: 38,
-      label: "Orçamento mensal",
-      action: () => openScreen("budget")
-    });
-
-    // Definir orçamento
-    makeHotspot({
-      x: 64, y: 332, w: 260, h: 38,
-      label: "Definir orçamento",
-      action: () => openScreen("budget")
-    });
-
-    // Botão flutuante +
-    makeHotspot({
-      x: 168, y: 743, w: 56, h: 56,
-      label: "Novo lançamento",
-      action: () => openScreen("newTransaction")
-    });
-  }
-
-  if(currentScreen === "home"){
-    // Logout
-    makeHotspot({
-      x: 338, y: 65, w: 36, h: 36,
-      label: "Sair",
-      action: () => openScreen("login")
-    });
-
-    // Setas mês
-    makeHotspot({
-      x: 20, y: 154, w: 42, h: 42,
-      label: "Mês anterior",
-      action: () => showToast("Mês anterior")
-    });
-
-    makeHotspot({
-      x: 330, y: 154, w: 42, h: 42,
-      label: "Próximo mês",
-      action: () => showToast("Próximo mês")
-    });
-
-    // Configuração do orçamento
-    makeHotspot({
-      x: 332, y: 257, w: 38, h: 38,
-      label: "Orçamento mensal",
-      action: () => openScreen("budget")
-    });
-
-    // Item de lançamento
-    makeHotspot({
-      x: 24, y: 407, w: 342, h: 44,
-      label: "Detalhes do lançamento",
-      action: () => showToast("Lançamento selecionado")
-    });
-
-    // Botão flutuante +
-    makeHotspot({
-      x: 168, y: 743, w: 56, h: 56,
-      label: "Novo lançamento",
-      action: () => openScreen("newTransaction")
-    });
-  }
-
-  if(currentScreen === "newTransaction"){
-    // Fechar modal
-    makeHotspot({
-      x: 333, y: 332, w: 36, h: 36,
-      label: "Fechar",
-      action: () => openScreen(hasTransactions ? "home" : "homeEmpty")
-    });
-
-    // Entrada
-    makeHotspot({
-      x: 56, y: 587, w: 120, h: 32,
-      label: "Entrada",
-      action: () => showToast("Entrada selecionada")
-    });
-
-    // Saída
-    makeHotspot({
-      x: 203, y: 587, w: 120, h: 32,
-      label: "Saída",
-      action: () => showToast("Saída selecionada")
-    });
-
-    // Salvar
-    makeHotspot({
-      x: 46, y: 713, w: 300, h: 47,
-      label: "Salvar lançamento",
-      action: () => {
-        hasTransactions = true;
-        localStorage.setItem("mc_figma_has_transactions", "1");
-        openScreen("home");
-      }
-    });
-  }
-
-  if(currentScreen === "budget"){
-    // Voltar
-    makeHotspot({
-      x: 20, y: 78, w: 42, h: 42,
-      label: "Voltar",
-      action: () => openScreen(hasTransactions ? "home" : "homeEmpty")
-    });
-
-    // Adicionar orçamento
-    makeHotspot({
-      x: 46, y: 292, w: 300, h: 47,
-      label: "Adicionar orçamento",
-      action: () => showToast("Orçamento adicionado")
-    });
-
-    // Remover item
-    makeHotspot({
-      x: 329, y: 401, w: 30, h: 30,
-      label: "Remover orçamento",
-      action: () => showToast("Orçamento removido")
-    });
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return saved ? { ...defaultState, ...saved } : structuredClone(defaultState);
+  }catch{
+    return structuredClone(defaultState);
   }
 }
 
-document.addEventListener("keydown", (event) => {
-  if(event.key === "Escape"){
-    if(currentScreen === "login") return;
-    openScreen(hasTransactions ? "home" : "homeEmpty");
-  }
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
 
-  if(event.key.toLowerCase() === "d"){
-    document.querySelectorAll(".hotspot").forEach(el => el.classList.toggle("debug"));
-  }
+function brl(value){
+  return Number(value || 0).toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+}
+
+function maybe(value){
+  return state.hideValues ? "R$ ••••" : brl(value);
+}
+
+function getMonthTransactions(){
+  return state.transactions;
+}
+
+function totals(){
+  const txs = getMonthTransactions();
+  const income = txs.filter(t => t.type === "Receita").reduce((a,b) => a + Number(b.amount), 0);
+  const expense = txs.filter(t => t.type === "Despesa").reduce((a,b) => a + Number(b.amount), 0);
+  return { income, expense, balance: income - expense };
+}
+
+function iconFor(category){
+  if(category === "Alimentação") return "basket(1).svg";
+  if(category === "Salário") return "gift(1).svg";
+  if(category === "Transporte") return "briefcase(1).svg";
+  if(category === "Casa") return "home-3(1).svg";
+  return "tag(1).svg";
+}
+
+function render(){
+  const t = totals();
+
+  $("#balanceValue").textContent = maybe(t.balance);
+  $("#incomeValue").textContent = maybe(t.income);
+  $("#expenseValue").textContent = maybe(t.expense);
+  $("#balanceSubtitle").textContent = `${state.transactions.length} lançamentos registrados`;
+
+  const percent = state.budget ? Math.min(100, Math.round((t.expense / state.budget) * 100)) : 0;
+  document.documentElement.style.setProperty("--budget-angle", `${percent * 3.6}deg`);
+  $("#budgetPercent").textContent = `${percent}%`;
+  $("#budgetText").textContent = `${maybe(t.expense)} usados de ${maybe(state.budget)}`;
+  $("#budgetStatusValue").textContent = maybe(t.expense);
+  $("#budgetStatusText").textContent = `usado de ${maybe(state.budget)}`;
+  $("#budgetProgress").style.width = `${percent}%`;
+  $("#budgetInput").value = state.budget || "";
+
+  renderTransactions();
+  renderCategories();
+  renderCategorySummary();
+  populateCategorySelect();
+  updateHideButtons();
+}
+
+function renderTransactions(){
+  const recent = [...state.transactions].sort((a,b) => b.date.localeCompare(a.date));
+  const filtered = currentFilter === "Todos" ? recent : recent.filter(t => t.type === currentFilter);
+
+  $("#recentTransactions").innerHTML = recent.slice(0,5).map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento ainda.");
+  $("#allTransactions").innerHTML = filtered.map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento encontrado.");
+
+  $$("[data-delete]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.transactions = state.transactions.filter(t => t.id !== btn.dataset.delete);
+      saveState();
+      render();
+    });
+  });
+}
+
+function transactionTemplate(t){
+  const sign = t.type === "Receita" ? "+" : "-";
+  const valueClass = t.type === "Receita" ? "income" : "expense";
+
+  return `
+    <div class="transaction-item">
+      <div class="transaction-left">
+        <div class="transaction-icon"><img src="assets/icons/${iconFor(t.category)}" alt=""></div>
+        <div>
+          <div class="transaction-title">${t.description}</div>
+          <div class="transaction-meta">${t.category} • ${new Date(t.date + "T00:00:00").toLocaleDateString("pt-BR")}</div>
+        </div>
+      </div>
+      <div class="transaction-value ${valueClass}">${state.hideValues ? "R$ ••••" : sign + " " + brl(t.amount)}</div>
+      <button data-delete="${t.id}" class="delete-btn" title="Excluir"><img src="assets/icons/trash-2(1).svg" alt=""></button>
+    </div>
+  `;
+}
+
+function emptyTemplate(text){
+  return `<div class="muted">${text}</div>`;
+}
+
+function renderCategorySummary(){
+  const expenses = state.transactions.filter(t => t.type === "Despesa");
+  const total = expenses.reduce((a,b) => a + Number(b.amount), 0) || 1;
+  const grouped = {};
+
+  expenses.forEach(t => grouped[t.category] = (grouped[t.category] || 0) + Number(t.amount));
+
+  $("#categorySummary").innerHTML = Object.entries(grouped).map(([category, value]) => {
+    const pct = Math.round((value / total) * 100);
+    return `
+      <div>
+        <div class="category-row">
+          <strong>${category}</strong>
+          <span>${maybe(value)}</span>
+        </div>
+        <div class="category-bar"><i style="width:${pct}%"></i></div>
+      </div>
+    `;
+  }).join("") || emptyTemplate("Sem despesas cadastradas.");
+}
+
+function renderCategories(){
+  $("#categoryList").innerHTML = state.categories.map(cat => `
+    <div class="transaction-item">
+      <div class="transaction-left">
+        <div class="transaction-icon"><img src="assets/icons/${iconFor(cat)}" alt=""></div>
+        <div class="transaction-title">${cat}</div>
+      </div>
+      <span class="muted">${state.transactions.filter(t => t.category === cat).length} lanç.</span>
+    </div>
+  `).join("");
+}
+
+function populateCategorySelect(){
+  $("#transactionCategory").innerHTML = state.categories.map(cat => `<option>${cat}</option>`).join("");
+}
+
+function openScreen(id){
+  $$(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  $("[data-screen].active")?.classList.remove("active");
+  $$(`[data-screen="${id}"]`).forEach(btn => btn.classList.add("active"));
+
+  const titles = {
+    dashboard:"Início",
+    transactions:"Lançamentos",
+    budget:"Orçamento",
+    categories:"Categorias",
+    settings:"Configurações"
+  };
+  $("#pageTitle").textContent = titles[id] || "Meu Controle";
+}
+
+function openDialog(type = "Despesa"){
+  currentType = type;
+  $("#transactionType").value = type;
+  $$("[data-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.type === type));
+  $("#transactionDate").value = new Date().toISOString().slice(0,10);
+  $("#transactionDialog").showModal();
+}
+
+function updateHideButtons(){
+  $("#settingsHideValues").classList.toggle("on", state.hideValues);
+  const icon = state.hideValues ? "eye-closed(1).svg" : "eye(1).svg";
+  $("#toggleValues img").src = `assets/icons/${icon}`;
+  $("#toggleValuesHero img").src = `assets/icons/${icon}`;
+}
+
+$$("[data-screen]").forEach(btn => btn.addEventListener("click", () => openScreen(btn.dataset.screen)));
+
+$("#openTransaction").addEventListener("click", () => openDialog("Despesa"));
+$("#openTransaction2").addEventListener("click", () => openDialog("Despesa"));
+$("#mobileAdd").addEventListener("click", () => openDialog("Despesa"));
+
+$$("[data-quick]").forEach(btn => btn.addEventListener("click", () => openDialog(btn.dataset.quick)));
+
+$$("[data-close]").forEach(btn => btn.addEventListener("click", () => {
+  document.getElementById(btn.dataset.close).close();
+}));
+
+$$("[data-type]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentType = btn.dataset.type;
+    $("#transactionType").value = currentType;
+    $$("[data-type]").forEach(b => b.classList.toggle("active", b === btn));
+  });
 });
 
-setTimeout(() => {
-  if(currentScreen === "splash"){
-    openScreen("login");
-  }
-}, 1400);
+$("#transactionForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
 
-renderHotspots();
+  state.transactions.push({
+    id: crypto.randomUUID(),
+    type: fd.get("type"),
+    description: String(fd.get("description")).trim(),
+    amount: Number(fd.get("amount")),
+    category: fd.get("category"),
+    date: fd.get("date")
+  });
+
+  saveState();
+  event.target.reset();
+  $("#transactionDialog").close();
+  openScreen("transactions");
+  render();
+});
+
+$("#budgetForm").addEventListener("submit", event => {
+  event.preventDefault();
+  state.budget = Number($("#budgetInput").value || 0);
+  saveState();
+  render();
+});
+
+$("#addCategoryBtn").addEventListener("click", () => {
+  const name = prompt("Nome da categoria:");
+  if(!name) return;
+  if(!state.categories.includes(name)) state.categories.push(name);
+  saveState();
+  render();
+});
+
+$$(".filter").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentFilter = btn.dataset.filter;
+    $$(".filter").forEach(f => f.classList.toggle("active", f === btn));
+    renderTransactions();
+  });
+});
+
+$("#toggleValues").addEventListener("click", () => {
+  state.hideValues = !state.hideValues;
+  saveState();
+  render();
+});
+
+$("#toggleValuesHero").addEventListener("click", () => {
+  state.hideValues = !state.hideValues;
+  saveState();
+  render();
+});
+
+$("#settingsHideValues").addEventListener("click", () => {
+  state.hideValues = !state.hideValues;
+  saveState();
+  render();
+});
+
+$("#exportData").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "meu-controle-backup.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+render();

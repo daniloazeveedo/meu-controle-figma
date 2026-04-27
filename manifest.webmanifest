@@ -1,10 +1,10 @@
 {
-  "name": "Meu Controle Figma Exact",
+  "name": "Meu Controle Financeiro",
   "short_name": "Meu Controle",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0F0F0F",
+  "background_color": "#F9FBF9",
   "theme_color": "#0F0F0F",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": []
 }
