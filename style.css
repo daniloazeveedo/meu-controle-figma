@@ -1554,3 +1554,11 @@ input:focus,select:focus{
 .month-strip-summary{
   display: none !important;
 }
+
+.user-welcome-card{
+  margin-bottom:16px;
+}
+
+.dashboard-grid{
+  margin-top:0 !important;
+}
