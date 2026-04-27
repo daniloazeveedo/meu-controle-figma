@@ -5,6 +5,11 @@ const STORAGE_KEY = "meuControleFigmaWebV41";
 
 const defaultState = {
   hideValues:false,
+  themeMode:"system",
+  user:{
+    name:"Danilo",
+    initials:"D"
+  },
   budget:1200,
   categories:["Alimentação","Transporte","Salário","Lazer","Casa","Saúde"],
   transactions:[
@@ -40,6 +45,51 @@ function brl(value){
 
 function maybe(value){
   return state.hideValues ? "R$ ••••" : brl(value);
+}
+
+
+function getActiveTheme(){
+  if(state.themeMode === "dark") return "dark";
+  if(state.themeMode === "light") return "light";
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(){
+  const active = getActiveTheme();
+  document.documentElement.dataset.theme = active;
+  document.documentElement.dataset.themeMode = state.themeMode || "system";
+  $$("[data-theme-mode]").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.themeMode === (state.themeMode || "system"));
+  });
+}
+
+function initialsFromName(name){
+  return String(name || "U")
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(part => part[0] || "")
+    .join("")
+    .toUpperCase() || "U";
+}
+
+function greetingPeriod(){
+  const hour = new Date().getHours();
+  if(hour < 12) return "Bom dia,";
+  if(hour < 18) return "Boa tarde,";
+  return "Boa noite,";
+}
+
+function renderUser(){
+  const user = state.user || { name:"Danilo", initials:"D" };
+  const initials = user.initials || initialsFromName(user.name);
+
+  if($("#welcomePeriod")) $("#welcomePeriod").textContent = greetingPeriod();
+  if($("#welcomeUserName")) $("#welcomeUserName").textContent = user.name || "Usuário";
+  if($("#userAvatar")) $("#userAvatar").textContent = initials;
+  if($("#settingsUserAvatar")) $("#settingsUserAvatar").textContent = initials;
+  if($("#settingsUserName")) $("#settingsUserName").textContent = user.name || "Usuário";
+  if($("#profileEditorAvatar")) $("#profileEditorAvatar").textContent = initials;
 }
 
 function getMonthTransactions(month = currentMonth){
@@ -100,6 +150,8 @@ function iconFor(category){
 }
 
 function render(){
+  applyTheme();
+  renderUser();
   const t = totals();
 
   $("#balanceValue").textContent = maybe(t.balance);
@@ -161,7 +213,44 @@ function renderTransactions(){
     btn.addEventListener("click", () => {
       state.transactions = state.transactions.filter(t => t.id !== btn.dataset.delete);
       saveState();
-      render();
+      
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
+  render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
     });
   });
 }
@@ -293,14 +382,88 @@ $("#transactionForm").addEventListener("submit", event => {
   event.target.reset();
   $("#transactionDialog").close();
   openScreen("transactions");
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $("#budgetForm").addEventListener("submit", event => {
   event.preventDefault();
   state.budget = Number($("#budgetInput").value || 0);
   saveState();
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $("#addCategoryBtn").addEventListener("click", () => {
@@ -308,7 +471,44 @@ $("#addCategoryBtn").addEventListener("click", () => {
   if(!name) return;
   if(!state.categories.includes(name)) state.categories.push(name);
   saveState();
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $$(".filter").forEach(btn => {
@@ -322,19 +522,130 @@ $$(".filter").forEach(btn => {
 $("#toggleValues").addEventListener("click", () => {
   state.hideValues = !state.hideValues;
   saveState();
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $("#toggleValuesHero").addEventListener("click", () => {
   state.hideValues = !state.hideValues;
   saveState();
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $("#settingsHideValues").addEventListener("click", () => {
   state.hideValues = !state.hideValues;
   saveState();
+  
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
   render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
+
+render();
 });
 
 $("#prevMonthBtn")?.addEventListener("click", () => {
@@ -356,5 +667,42 @@ $("#exportData").addEventListener("click", () => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+
+$("#openProfileDialog")?.addEventListener("click", () => {
+  const user = state.user || { name:"Danilo", initials:"D" };
+  $("#profileNameInput").value = user.name || "";
+  $("#profileInitialsInput").value = user.initials || initialsFromName(user.name);
+  $("#profileEditorAvatar").textContent = user.initials || initialsFromName(user.name);
+  $("#profileDialog").showModal();
+});
+
+$("#openProfileDialog2")?.addEventListener("click", () => $("#openProfileDialog")?.click());
+
+$("#profileForm")?.addEventListener("submit", event => {
+  event.preventDefault();
+  const fd = new FormData(event.target);
+  const name = String(fd.get("userName") || "").trim() || "Usuário";
+  const initials = String(fd.get("userInitials") || "").trim().toUpperCase() || initialsFromName(name);
+  state.user = { name, initials };
+  saveState();
+  $("#profileDialog").close();
+  render();
+});
+
+$$("[data-theme-mode]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    state.themeMode = btn.dataset.themeMode;
+    saveState();
+    applyTheme();
+  });
+});
+
+if(window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+    if((state.themeMode || "system") === "system") applyTheme();
+  });
+}
+
 
 render();

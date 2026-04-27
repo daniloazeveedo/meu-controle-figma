@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.4</title>
+  <title>Meu Controle Financeiro v4.5</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -58,7 +58,17 @@
       </header>
 
       <section class="screen active" id="dashboard">
-        <div class="dashboard-grid">
+                <article class="user-welcome-card">
+          <div class="user-avatar" id="userAvatar">D</div>
+          <div>
+            <span id="welcomePeriod">Olá,</span>
+            <h2 id="welcomeUserName">Danilo</h2>
+            <p>Vamos organizar suas finanças?</p>
+          </div>
+          <button class="edit-user-btn" id="openProfileDialog">Editar</button>
+        </article>
+
+<div class="dashboard-grid">
           <article class="balance-card">
             <div class="balance-head">
               <span>Saldo disponível</span>
@@ -234,6 +244,27 @@
       <section class="screen" id="settings">
         <div class="settings-grid">
           <article class="card">
+            <h2>Perfil</h2>
+            <div class="profile-preview">
+              <div class="user-avatar small" id="settingsUserAvatar">D</div>
+              <div>
+                <strong id="settingsUserName">Danilo</strong>
+                <span>Usuário principal</span>
+              </div>
+              <button class="secondary-mini" id="openProfileDialog2">Editar</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Aparência</h2>
+            <div class="appearance-options">
+              <button class="appearance-option active" data-theme-mode="system">Usar do sistema</button>
+              <button class="appearance-option" data-theme-mode="light">Modo claro</button>
+              <button class="appearance-option" data-theme-mode="dark">Modo escuro</button>
+            </div>
+          </article>
+
+          <article class="card">
             <h2>Preferências</h2>
             <div class="settings-row">
               <span>Ocultar valores</span>
@@ -296,6 +327,30 @@
       </label>
 
       <button class="primary-action submit" type="submit">Salvar</button>
+    </form>
+  </dialog>
+
+
+  <dialog id="profileDialog" class="dialog">
+    <form id="profileForm" class="dialog-card">
+      <div class="dialog-head">
+        <h2>Editar perfil</h2>
+        <button type="button" class="close" data-close="profileDialog">
+          <img src="assets/icons/multiply(1).svg" alt="" />
+        </button>
+      </div>
+
+      <div class="profile-editor-avatar" id="profileEditorAvatar">D</div>
+
+      <label>Seu nome
+        <input name="userName" id="profileNameInput" placeholder="Ex: Danilo" required />
+      </label>
+
+      <label>Iniciais ou apelido curto
+        <input name="userInitials" id="profileInitialsInput" maxlength="4" placeholder="Ex: D&I" />
+      </label>
+
+      <button class="primary-action submit" type="submit">Salvar perfil</button>
     </form>
   </dialog>
 

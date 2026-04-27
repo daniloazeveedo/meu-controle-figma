@@ -1048,3 +1048,187 @@ input:focus,select:focus{
     width:22px;
   }
 }
+
+/* v4.5 — Cadastro do usuário + aparência automática */
+.user-welcome-card{
+  grid-column:1 / -1;
+  background:#fff;
+  border-radius:var(--radius);
+  padding:20px 22px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(229,230,229,.7);
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.user-avatar{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#F8E8F9,#fff);
+  border:3px solid var(--magenta);
+  color:var(--text);
+  font-weight:900;
+  font-size:18px;
+  box-shadow:0 10px 20px rgba(218,75,221,.12);
+  flex:0 0 auto;
+}
+
+.user-avatar.small{
+  width:46px;
+  height:46px;
+  font-size:15px;
+}
+
+.user-welcome-card span{
+  color:var(--magenta);
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+.user-welcome-card h2{
+  margin:2px 0;
+}
+
+.user-welcome-card p{
+  margin:0;
+  color:var(--text-soft);
+}
+
+.edit-user-btn,
+.secondary-mini{
+  margin-left:auto;
+  min-height:40px;
+  padding:0 14px;
+  border-radius:14px;
+  background:#F8E8F9;
+  color:var(--magenta);
+  font-weight:900;
+}
+
+.profile-preview{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:16px;
+}
+
+.profile-preview strong{
+  display:block;
+  font-weight:900;
+}
+
+.profile-preview span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:2px;
+}
+
+.appearance-options{
+  display:grid;
+  gap:10px;
+  margin-top:16px;
+}
+
+.appearance-option{
+  min-height:46px;
+  border-radius:16px;
+  background:var(--bg);
+  color:var(--text-soft);
+  font-weight:900;
+  text-align:left;
+  padding:0 14px;
+}
+
+.appearance-option.active{
+  background:#F8E8F9;
+  color:var(--magenta);
+  box-shadow:inset 0 0 0 1px rgba(218,75,221,.25);
+}
+
+.profile-editor-avatar{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  margin:6px auto 12px;
+  background:linear-gradient(135deg,#F8E8F9,#fff);
+  border:3px solid var(--magenta);
+  color:var(--text);
+  font-size:24px;
+  font-weight:900;
+}
+
+/* Tema escuro automático/manual */
+:root[data-theme="dark"]{
+  --bg:#0F0F0F;
+  --surface:#1A1A1A;
+  --soft:#252525;
+  --line:#343434;
+  --muted:#A1A2A1;
+  --text:#F9FBF9;
+  --text-soft:#E5E6E5;
+  --shadow:0 18px 42px rgba(0,0,0,.35);
+}
+
+:root[data-theme="dark"] body{
+  background:#0F0F0F;
+  color:var(--text);
+}
+
+:root[data-theme="dark"] .sidebar,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .budget-card,
+:root[data-theme="dark"] .quick-card,
+:root[data-theme="dark"] .user-welcome-card,
+:root[data-theme="dark"] .dialog-card,
+:root[data-theme="dark"] .icon-button,
+:root[data-theme="dark"] .transaction-item,
+:root[data-theme="dark"] .month-overview div{
+  background:#1A1A1A;
+  border-color:#343434;
+}
+
+:root[data-theme="dark"] .month-bar,
+:root[data-theme="dark"] .month-strip-summary,
+:root[data-theme="dark"] .month-strip-arrow,
+:root[data-theme="dark"] .month-chip,
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] .quick-grid button,
+:root[data-theme="dark"] .summary-grid > div,
+:root[data-theme="dark"] .appearance-option{
+  background:#252525;
+  color:var(--text);
+  border-color:#343434;
+}
+
+:root[data-theme="dark"] .mobile-nav{
+  background:rgba(26,26,26,.94);
+  border-color:#343434;
+}
+
+:root[data-theme="dark"] .balance-card,
+:root[data-theme="dark"] .month-budget-card{
+  background:linear-gradient(102deg,#0F0F0F 0%, #2D2D2D 100%);
+}
+
+@media(max-width:900px){
+  .user-welcome-card{
+    border-radius:26px;
+    align-items:center;
+    padding:18px;
+  }
+
+  .edit-user-btn{
+    min-height:38px;
+    padding:0 12px;
+  }
+}

@@ -40,3 +40,10 @@ Estrutura principal:
 - Barra de meses ajustada para exibir 5 meses, como no Figma.
 - Mês selecionado destacado com linha rosa.
 - Setas laterais continuam navegando mês a mês.
+
+
+## v4.5
+- Adicionado cadastro/edição de usuário.
+- Nome e iniciais aparecem na tela inicial.
+- Configurações agora possuem opção de aparência: sistema, claro e escuro.
+- Tema acompanha automaticamente o sistema quando selecionado.
