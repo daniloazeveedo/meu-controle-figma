@@ -1619,3 +1619,31 @@ input:focus,select:focus{
     border-radius: 18px;
   }
 }
+
+/* Corrige o campo de data no modal mobile */
+@media (max-width: 900px) {
+  .dialog-card label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dialog-card input,
+  .dialog-card select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .dialog-card input[type="date"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    text-align: center;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
