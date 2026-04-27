@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0F0F0F" />
+  <title>Meu Controle — Figma Exact</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="phone-frame" aria-label="Aplicativo Meu Controle">
+      <div class="screen-stage" id="screenStage">
+        <img id="screenImage" class="screen-image" src="assets/screens/splash.svg" alt="Tela do app" draggable="false" />
+
+        <!-- Hotspots ficam em coordenadas do frame Figma 390x844 -->
+        <div id="hotspots" class="hotspots"></div>
+      </div>
+    </section>
+
+    <aside class="desktop-note">
+      <strong>Meu Controle — Figma Exact</strong>
+      <span>Esta versão usa os SVGs exportados do Figma como tela, para ficar visualmente igual ao protótipo.</span>
+      <small>Use no celular ou redimensione a janela para testar como PWA.</small>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

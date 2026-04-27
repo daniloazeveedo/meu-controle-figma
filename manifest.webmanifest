@@ -1,0 +1,10 @@
+{
+  "name": "Meu Controle Figma Exact",
+  "short_name": "Meu Controle",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#0F0F0F",
+  "orientation": "portrait",
+  "icons": []
+}
