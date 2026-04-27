@@ -1562,3 +1562,60 @@ input:focus,select:focus{
 .dashboard-grid{
   margin-top:0 !important;
 }
+
+/* Ajuste do modal de novo lançamento no mobile */
+@media (max-width: 900px) {
+  .dialog {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .dialog-card {
+    width: calc(100vw - 32px);
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px 22px;
+    border-radius: 32px;
+    max-height: calc(100dvh - 120px);
+    overflow-y: auto;
+  }
+
+  #transactionDialog {
+    align-items: center;
+    justify-content: center;
+  }
+
+  #transactionDialog[open] {
+    display: flex;
+  }
+
+  .dialog-head {
+    align-items: center;
+  }
+
+  .dialog-head h2 {
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .close {
+    flex: 0 0 auto;
+  }
+
+  .type-tabs {
+    width: 100%;
+  }
+
+  .dialog-card input,
+  .dialog-card select {
+    width: 100%;
+  }
+
+  .dialog-card .submit {
+    width: 100%;
+    min-height: 56px;
+    border-radius: 18px;
+  }
+}
