@@ -957,3 +957,94 @@ input:focus,select:focus{
     font-size:16px;
   }
 }
+
+/* v4.4 — Faixa de 5 meses igual ao Figma */
+.month-strip{
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  align-items:center;
+  gap:6px;
+  background:transparent;
+  margin-bottom:6px;
+}
+
+.month-strip-track{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  align-items:center;
+  gap:4px;
+  min-width:0;
+}
+
+.month-strip-arrow{
+  width:42px;
+  height:42px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  background:transparent;
+  font-size:30px;
+  font-weight:900;
+}
+
+.month-chip{
+  position:relative;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.month-chip.active{
+  color:var(--text);
+}
+
+.month-chip.active::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:3px;
+  width:24px;
+  height:3px;
+  border-radius:999px;
+  background:var(--magenta);
+  transform:translateX(-50%);
+}
+
+.month-strip-summary{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:900;
+  text-align:center;
+  margin:0 0 12px;
+}
+
+@media(max-width:900px){
+  .month-strip{
+    grid-template-columns:34px 1fr 34px;
+    margin-top:2px;
+  }
+
+  .month-strip-arrow{
+    width:34px;
+    height:38px;
+    border-radius:14px;
+    font-size:28px;
+  }
+
+  .month-chip{
+    height:38px;
+    font-size:12px;
+  }
+
+  .month-chip.active::after{
+    bottom:1px;
+    width:22px;
+  }
+}

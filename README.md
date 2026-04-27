@@ -34,3 +34,9 @@ Estrutura principal:
 - Adicionado card de orçamento utilizado na tela de lançamentos.
 - Barra rosa mostra o percentual do orçamento mensal usado.
 - Card exibe orçamento disponível, usado e limite.
+
+
+## v4.4
+- Barra de meses ajustada para exibir 5 meses, como no Figma.
+- Mês selecionado destacado com linha rosa.
+- Setas laterais continuam navegando mês a mês.

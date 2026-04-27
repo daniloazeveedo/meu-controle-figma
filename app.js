@@ -58,6 +58,32 @@ function monthLabel(month){
   return date.toLocaleDateString('pt-BR', { month:'long', year:'numeric' }).replace(/^./, c => c.toUpperCase());
 }
 
+function monthShortLabel(month){
+  const [year, monthIndex] = month.split('-').map(Number);
+  const date = new Date(year, monthIndex - 1, 1);
+  return date.toLocaleDateString('pt-BR', { month:'short' }).replace('.', '').toUpperCase();
+}
+
+function renderMonthStrip(){
+  const track = $("#monthStripTrack");
+  if(!track) return;
+
+  const months = [-2, -1, 0, 1, 2].map(offset => shiftMonth(currentMonth, offset));
+
+  track.innerHTML = months.map(month => `
+    <button class="month-chip ${month === currentMonth ? 'active' : ''}" data-month="${month}">
+      ${monthShortLabel(month)}
+    </button>
+  `).join("");
+
+  $$(".month-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentMonth = btn.dataset.month;
+      renderTransactions();
+    });
+  });
+}
+
 function totals(){
   const txs = getMonthTransactions();
   const income = txs.filter(t => t.type === "Receita").reduce((a,b) => a + Number(b.amount), 0);
@@ -107,11 +133,11 @@ function renderTransactions(){
   const monthExpense = monthTransactions.filter(t => t.type === "Despesa").reduce((a,b) => a + Number(b.amount), 0);
   const monthBalance = monthIncome - monthExpense;
 
-  if($("#monthYearLabel")) $("#monthYearLabel").textContent = monthLabel(currentMonth);
+  renderMonthStrip();
   if($("#monthIncomeValue")) $("#monthIncomeValue").textContent = maybe(monthIncome);
   if($("#monthExpenseValue")) $("#monthExpenseValue").textContent = maybe(monthExpense);
   if($("#monthBalanceValue")) $("#monthBalanceValue").textContent = maybe(monthBalance);
-  if($("#monthSummaryLabel")) $("#monthSummaryLabel").textContent = `${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`;
+  if($("#monthSummaryLabel")) $("#monthSummaryLabel").textContent = `${monthLabel(currentMonth)} • ${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`;
 
   const [currentYear, currentMonthNumber] = currentMonth.split('-').map(Number);
   const monthDate = new Date(currentYear, currentMonthNumber - 1, 1);

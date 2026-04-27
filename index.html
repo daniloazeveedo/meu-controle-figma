@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.3</title>
+  <title>Meu Controle Financeiro v4.4</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -130,14 +130,12 @@
               <img src="assets/icons/plus(1).svg" alt="" /> Adicionar
             </button>
           </div>
-          <div class="month-bar">
-            <button class="month-arrow" id="prevMonthBtn" aria-label="Mês anterior">‹</button>
-            <div class="month-center">
-              <span id="monthYearLabel">Abril 2026</span>
-              <small id="monthSummaryLabel">Resumo do mês</small>
-            </div>
-            <button class="month-arrow" id="nextMonthBtn" aria-label="Próximo mês">›</button>
+          <div class="month-strip" aria-label="Selecionar mês">
+            <button class="month-strip-arrow" id="prevMonthBtn" aria-label="Mês anterior">‹</button>
+            <div class="month-strip-track" id="monthStripTrack"></div>
+            <button class="month-strip-arrow" id="nextMonthBtn" aria-label="Próximo mês">›</button>
           </div>
+          <div class="month-strip-summary" id="monthSummaryLabel">Resumo do mês</div>
 
           <div class="month-budget-card">
             <div class="month-budget-head">
