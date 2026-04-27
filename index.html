@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.2</title>
+  <title>Meu Controle Financeiro v4.3</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -137,6 +137,38 @@
               <small id="monthSummaryLabel">Resumo do mês</small>
             </div>
             <button class="month-arrow" id="nextMonthBtn" aria-label="Próximo mês">›</button>
+          </div>
+
+          <div class="month-budget-card">
+            <div class="month-budget-head">
+              <div>
+                <span id="monthBudgetLabel">MAIO</span>
+                <small>/ 2026</small>
+              </div>
+              <button data-screen="budget" class="month-budget-config" aria-label="Configurar orçamento">
+                <img src="assets/icons/settings-fill(1).svg" alt="" />
+              </button>
+            </div>
+
+            <div class="month-budget-main">
+              <span>Orçamento disponível</span>
+              <strong id="monthBudgetAvailable">R$ 0,00</strong>
+            </div>
+
+            <div class="month-budget-values">
+              <div>
+                <span>Usado</span>
+                <strong id="monthBudgetUsed">R$ 0,00</strong>
+              </div>
+              <div>
+                <span>Limite</span>
+                <strong id="monthBudgetLimit">R$ 0,00</strong>
+              </div>
+            </div>
+
+            <div class="month-budget-progress">
+              <i id="monthBudgetProgress"></i>
+            </div>
           </div>
 
           <div class="month-overview">

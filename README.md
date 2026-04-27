@@ -28,3 +28,9 @@ Estrutura principal:
 - Adicionada barra de meses na tela de lançamentos.
 - Filtro de lançamentos por mês.
 - Resumo mensal com entradas, saídas e saldo.
+
+
+## v4.3
+- Adicionado card de orçamento utilizado na tela de lançamentos.
+- Barra rosa mostra o percentual do orçamento mensal usado.
+- Card exibe orçamento disponível, usado e limite.

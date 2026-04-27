@@ -113,6 +113,21 @@ function renderTransactions(){
   if($("#monthBalanceValue")) $("#monthBalanceValue").textContent = maybe(monthBalance);
   if($("#monthSummaryLabel")) $("#monthSummaryLabel").textContent = `${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`;
 
+  const [currentYear, currentMonthNumber] = currentMonth.split('-').map(Number);
+  const monthDate = new Date(currentYear, currentMonthNumber - 1, 1);
+  const shortMonth = monthDate.toLocaleDateString('pt-BR', { month:'long' }).toUpperCase();
+  const budgetLimit = Number(state.budget || 0);
+  const budgetUsed = monthExpense;
+  const budgetAvailable = budgetLimit - budgetUsed;
+  const budgetPercent = budgetLimit ? Math.min(100, Math.round((budgetUsed / budgetLimit) * 100)) : 0;
+
+  if($("#monthBudgetLabel")) $("#monthBudgetLabel").textContent = shortMonth;
+  if($(".month-budget-head small")) $(".month-budget-head small").textContent = `/ ${currentYear}`;
+  if($("#monthBudgetAvailable")) $("#monthBudgetAvailable").textContent = maybe(budgetAvailable);
+  if($("#monthBudgetUsed")) $("#monthBudgetUsed").textContent = maybe(budgetUsed);
+  if($("#monthBudgetLimit")) $("#monthBudgetLimit").textContent = maybe(budgetLimit);
+  if($("#monthBudgetProgress")) $("#monthBudgetProgress").style.width = `${budgetPercent}%`;
+
   $("#recentTransactions").innerHTML = recent.slice(0,5).map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento ainda.");
   $("#allTransactions").innerHTML = filtered.map(transactionTemplate).join("") || emptyTemplate("Nenhum lançamento encontrado neste mês.");
 
