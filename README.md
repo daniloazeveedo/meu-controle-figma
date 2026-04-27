@@ -47,3 +47,15 @@ Estrutura principal:
 - Nome e iniciais aparecem na tela inicial.
 - Configurações agora possuem opção de aparência: sistema, claro e escuro.
 - Tema acompanha automaticamente o sistema quando selecionado.
+
+
+## v4.6
+- Refinado o modo escuro.
+- Cards, sidebar, botões, inputs e textos ajustados para melhor contraste.
+- Magenta aplicado com menos estouro visual.
+- Ícones adaptados para o tema escuro.
+
+
+## v4.6.1
+- aumentado o espaçamento entre colunas principais
+- card de boas-vindas com mais respiro entre conteúdo e botão Editar
