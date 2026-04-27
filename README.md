@@ -56,9 +56,6 @@ Estrutura principal:
 - Ícones adaptados para o tema escuro.
 
 
-## v4.7
-- Correção do modal de novo lançamento no mobile.
-- Campo de data deixou de usar type="date" visualmente, evitando bugs do Safari/iPhone.
-- Data visual centralizada e sem vazar para fora da caixa.
-- Mantido valor ISO interno para não quebrar filtros, meses e ordenação.
-- Mantidos ajustes de espaçamento e modo escuro das versões anteriores.
+## v4.6.1
+- aumentado o espaçamento entre colunas principais
+- card de boas-vindas com mais respiro entre conteúdo e botão Editar
