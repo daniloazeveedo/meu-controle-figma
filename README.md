@@ -64,3 +64,10 @@ Estrutura principal:
 - Mantida a base enviada pelo usuário com CSS/configurações da v4.6/v4.6.1.
 - Reaplicadas as alterações da v4.8: modal mobile sem empurrar a tela, calendário nativo, status Realizado/Previsto, gasto previsto e sobra prevista.
 - Refeito o app.js para remover duplicações de eventos e manter compatibilidade com os dados salvos no localStorage da versão v4.1/v4.6.
+
+
+## v4.8.3
+- Removido o bloco de previsto da tela inicial para deixar a Home mais limpa.
+- Na tela de lançamentos, o resumo agora alterna entre "Entradas e saídas" e "Previsto".
+- Mantido calendário nativo para escolher data.
+- Mantida lógica de Realizado/Previsto nos lançamentos.

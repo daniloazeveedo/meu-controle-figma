@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.8.2</title>
+  <title>Meu Controle Financeiro v4.8.3</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -87,17 +87,7 @@
                 <span>Saídas</span>
                 <b class="expense" id="expenseValue">R$ 0,00</b>
               </div>
-            </div>
-            <div class="forecast-card-inline">
-              <div>
-                <span>Gasto previsto</span>
-                <b class="expense" id="forecastExpenseValue">R$ 0,00</b>
-              </div>
-              <div>
-                <span>Sobra prevista</span>
-                <b id="forecastBalanceValue">R$ 0,00</b>
-              </div>
-            </div>
+            </div></div>
           </article>
 
           <article class="budget-card">
@@ -191,41 +181,23 @@
             </div>
           </div>
 
-          <div class="forecast-strip">
-            <div>
-              <span>Gasto previsto</span>
-              <strong class="expense" id="plannedExpenseValue">R$ 0,00</strong>
-            </div>
-            <div>
-              <span>Sobra prevista</span>
-              <strong id="plannedBalanceValue">R$ 0,00</strong>
-            </div>
+          <div class="summary-toggle" aria-label="Alternar resumo de lançamentos">
+            <button class="active" type="button" data-summary-mode="realized">Entradas e saídas</button>
+            <button type="button" data-summary-mode="projected">Previsto</button>
           </div>
 
-          <div class="month-overview projected-grid">
+          <div class="month-overview">
             <div>
-              <span>Entradas</span>
+              <span id="monthIncomeLabel">Entradas</span>
               <strong class="income" id="monthIncomeValue">R$ 0,00</strong>
             </div>
             <div>
-              <span>Saídas</span>
+              <span id="monthExpenseLabel">Saídas</span>
               <strong class="expense" id="monthExpenseValue">R$ 0,00</strong>
             </div>
             <div>
-              <span>Saldo</span>
+              <span id="monthBalanceLabel">Saldo</span>
               <strong id="monthBalanceValue">R$ 0,00</strong>
-            </div>
-            <div>
-              <span>Entradas previstas</span>
-              <strong class="income" id="monthProjectedIncomeValue">R$ 0,00</strong>
-            </div>
-            <div>
-              <span>Saídas previstas</span>
-              <strong class="expense" id="monthProjectedExpenseValue">R$ 0,00</strong>
-            </div>
-            <div>
-              <span>Saldo previsto</span>
-              <strong id="monthProjectedBalanceValue">R$ 0,00</strong>
             </div>
           </div>
 

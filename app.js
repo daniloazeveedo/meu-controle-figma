@@ -25,6 +25,7 @@ let state = loadState();
 let currentFilter = "Todos";
 let currentMonth = getInitialMonth();
 let currentType = "Despesa";
+let summaryMode = "realized";
 let lockedScrollY = 0;
 
 function cloneDefault(){
@@ -249,39 +250,52 @@ function renderTransactions(){
   const filtered = currentFilter === 'Todos' ? monthSorted : monthSorted.filter(t => t.type === currentFilter);
 
   renderMonthStrip();
-  $('#monthSummaryLabel') && ($('#monthSummaryLabel').textContent = `${monthLabel(currentMonth)} • ${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`);
+
+  if($('#monthSummaryLabel')) {
+    $('#monthSummaryLabel').textContent = `${monthLabel(currentMonth)} • ${monthTransactions.length} lançamento${monthTransactions.length === 1 ? '' : 's'} no mês`;
+  }
 
   const [year, monthNumber] = currentMonth.split('-').map(Number);
-  const shortMonth = new Date(year, monthNumber - 1, 1).toLocaleDateString('pt-BR', { month: 'long' }).toUpperCase();
+  const monthDate = new Date(year, monthNumber - 1, 1);
+  const shortMonth = monthDate.toLocaleDateString('pt-BR', { month: 'long' }).toUpperCase();
   const budgetLimit = Number(state.budget || 0);
   const budgetUsed = stats.realized.expense;
   const budgetAvailable = budgetLimit - budgetUsed;
   const budgetPercent = budgetLimit ? Math.min(100, Math.round((budgetUsed / budgetLimit) * 100)) : 0;
 
-  $('#monthBudgetLabel') && ($('#monthBudgetLabel').textContent = shortMonth);
-  $('.month-budget-head small') && ($('.month-budget-head small').textContent = `/ ${year}`);
-  $('#monthBudgetAvailable') && ($('#monthBudgetAvailable').textContent = maybe(budgetAvailable));
-  $('#monthBudgetUsed') && ($('#monthBudgetUsed').textContent = maybe(budgetUsed));
-  $('#monthBudgetLimit') && ($('#monthBudgetLimit').textContent = maybe(budgetLimit));
-  $('#monthBudgetProgress') && ($('#monthBudgetProgress').style.width = `${budgetPercent}%`);
-  $('#plannedExpenseValue') && ($('#plannedExpenseValue').textContent = maybe(stats.pendingExpense));
-  $('#plannedBalanceValue') && ($('#plannedBalanceValue').textContent = maybe(stats.projected.balance));
+  if($('#monthBudgetLabel')) $('#monthBudgetLabel').textContent = shortMonth;
+  const budgetHeadSmall = $('.month-budget-head small');
+  if(budgetHeadSmall) budgetHeadSmall.textContent = `/ ${year}`;
+  if($('#monthBudgetAvailable')) $('#monthBudgetAvailable').textContent = maybe(budgetAvailable);
+  if($('#monthBudgetUsed')) $('#monthBudgetUsed').textContent = maybe(budgetUsed);
+  if($('#monthBudgetLimit')) $('#monthBudgetLimit').textContent = maybe(budgetLimit);
+  if($('#monthBudgetProgress')) $('#monthBudgetProgress').style.width = `${budgetPercent}%`;
 
-  $('#monthIncomeValue') && ($('#monthIncomeValue').textContent = maybe(stats.realized.income));
-  $('#monthExpenseValue') && ($('#monthExpenseValue').textContent = maybe(stats.realized.expense));
-  $('#monthBalanceValue') && ($('#monthBalanceValue').textContent = maybe(stats.realized.balance));
-  $('#monthProjectedIncomeValue') && ($('#monthProjectedIncomeValue').textContent = maybe(stats.projected.income));
-  $('#monthProjectedExpenseValue') && ($('#monthProjectedExpenseValue').textContent = maybe(stats.projected.expense));
-  $('#monthProjectedBalanceValue') && ($('#monthProjectedBalanceValue').textContent = maybe(stats.projected.balance));
+  const selectedStats = summaryMode === 'projected' ? stats.projected : stats.realized;
+  const labelSuffix = summaryMode === 'projected' ? ' previstas' : '';
+
+  if($('#monthIncomeLabel')) $('#monthIncomeLabel').textContent = `Entradas${labelSuffix}`;
+  if($('#monthExpenseLabel')) $('#monthExpenseLabel').textContent = `Saídas${labelSuffix}`;
+  if($('#monthBalanceLabel')) $('#monthBalanceLabel').textContent = summaryMode === 'projected' ? 'Saldo previsto' : 'Saldo';
+
+  if($('#monthIncomeValue')) $('#monthIncomeValue').textContent = maybe(selectedStats.income);
+  if($('#monthExpenseValue')) $('#monthExpenseValue').textContent = maybe(selectedStats.expense);
+  if($('#monthBalanceValue')) $('#monthBalanceValue').textContent = maybe(selectedStats.balance);
+
+  $$('[data-summary-mode]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.summaryMode === summaryMode);
+  });
 
   $('#recentTransactions').innerHTML = recent.slice(0, 5).map(transactionTemplate).join('') || emptyTemplate('Nenhum lançamento ainda.');
   $('#allTransactions').innerHTML = filtered.map(transactionTemplate).join('') || emptyTemplate('Nenhum lançamento encontrado neste mês.');
 
-  $$('[data-delete]').forEach(btn => btn.addEventListener('click', () => {
-    state.transactions = state.transactions.filter(t => t.id !== btn.dataset.delete);
-    saveState();
-    render();
-  }));
+  $$('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.transactions = state.transactions.filter(t => t.id !== btn.dataset.delete);
+      saveState();
+      render();
+    });
+  });
 }
 
 function renderCategorySummary(){
@@ -496,6 +510,13 @@ function bindEvents(){
       if((state.themeMode || 'system') === 'system') applyTheme();
     });
   }
+  $$('[data-summary-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      summaryMode = btn.dataset.summaryMode || 'realized';
+      renderTransactions();
+    });
+  });
+
   setupDatePicker();
 }
 
