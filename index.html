@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.8.7</title>
+  <title>Meu Controle Financeiro v4.8.2</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -87,7 +87,17 @@
                 <span>Saídas</span>
                 <b class="expense" id="expenseValue">R$ 0,00</b>
               </div>
-            </div></div>
+            </div>
+            <div class="forecast-card-inline">
+              <div>
+                <span>Gasto previsto</span>
+                <b class="expense" id="forecastExpenseValue">R$ 0,00</b>
+              </div>
+              <div>
+                <span>Sobra prevista</span>
+                <b id="forecastBalanceValue">R$ 0,00</b>
+              </div>
+            </div>
           </article>
 
           <article class="budget-card">
@@ -180,13 +190,19 @@
               <i id="monthBudgetProgress"></i>
             </div>
           </div>
-<div>
+
+          <div class="forecast-strip">
+            <div>
+              <span>Gasto previsto</span>
+              <strong class="expense" id="plannedExpenseValue">R$ 0,00</strong>
+            </div>
+            <div>
               <span>Sobra prevista</span>
               <strong id="plannedBalanceValue">R$ 0,00</strong>
             </div>
           </div>
 
-          <div class="month-overview">
+          <div class="month-overview projected-grid">
             <div>
               <span>Entradas</span>
               <strong class="income" id="monthIncomeValue">R$ 0,00</strong>
@@ -198,6 +214,18 @@
             <div>
               <span>Saldo</span>
               <strong id="monthBalanceValue">R$ 0,00</strong>
+            </div>
+            <div>
+              <span>Entradas previstas</span>
+              <strong class="income" id="monthProjectedIncomeValue">R$ 0,00</strong>
+            </div>
+            <div>
+              <span>Saídas previstas</span>
+              <strong class="expense" id="monthProjectedExpenseValue">R$ 0,00</strong>
+            </div>
+            <div>
+              <span>Saldo previsto</span>
+              <strong id="monthProjectedBalanceValue">R$ 0,00</strong>
             </div>
           </div>
 
@@ -347,71 +375,6 @@
 
       <button class="primary-action submit" type="submit">Salvar</button>
     </form>
-  </dialog>
-
-
-
-  <dialog id="transactionDetailDialog" class="dialog detail-dialog">
-    <div class="dialog-card transaction-detail-card">
-      <div class="detail-handle"></div>
-
-      <div class="detail-icon" id="detailIcon">
-        <img src="assets/icons/tag(1).svg" alt="" />
-      </div>
-
-      <h2 id="detailTitle">Lançamento</h2>
-      <strong class="detail-value" id="detailValue">R$ 0,00</strong>
-
-      <div class="detail-status-pill" id="detailStatusPill">Pendente</div>
-
-      <div class="detail-actions">
-        <button type="button" class="detail-action danger" id="detailDelete">
-          <span class="detail-action-circle">Excluir</span>
-        </button>
-        <button type="button" class="detail-action" id="detailDuplicate">
-          <span class="detail-action-circle">Duplicar</span>
-        </button>
-        <button type="button" class="detail-action status" id="detailToggleStatus">
-          <span class="detail-action-circle" id="detailToggleStatusLabel">Status</span>
-        </button>
-        <button type="button" class="detail-action" id="detailEdit">
-          <span class="detail-action-circle">Editar</span>
-        </button>
-      </div>
-
-      <div class="detail-info-grid">
-        <div>
-          <span>Data</span>
-          <strong id="detailDate">--/--/----</strong>
-        </div>
-        <div>
-          <span>Situação</span>
-          <strong id="detailSituation">Pendente</strong>
-        </div>
-        <div>
-          <span>Conta</span>
-          <strong>Nubank</strong>
-        </div>
-        <div>
-          <span>Categoria</span>
-          <strong id="detailCategory">Categoria</strong>
-        </div>
-        <div>
-          <span>Tags</span>
-          <button type="button">Adicionar</button>
-        </div>
-        <div>
-          <span>Observação</span>
-          <button type="button">Adicionar</button>
-        </div>
-        <div>
-          <span>Anexos</span>
-          <button type="button">Adicionar</button>
-        </div>
-      </div>
-
-      <button type="button" class="close-detail" data-close="transactionDetailDialog">Fechar</button>
-    </div>
   </dialog>
 
 
