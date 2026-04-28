@@ -1695,3 +1695,167 @@ input:focus,select:focus{
   color: #F9FBF9 !important;
   -webkit-text-fill-color: #F9FBF9 !important;
 }
+/* v4.8.2 — previsto + calendário nativo + modal mobile sem empurrar tela */
+body.modal-open{
+  position:fixed;
+  inset:0;
+  width:100%;
+  overflow:hidden;
+}
+
+.dialog{
+  width:100%;
+  max-width:none;
+}
+
+.dialog[open]{
+  position:fixed;
+  inset:0;
+  margin:0;
+  padding:16px;
+  display:grid;
+  place-items:center;
+  overflow:auto;
+  z-index:100;
+}
+
+.dialog-card{
+  margin:auto;
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+
+.date-picker-field{
+  position:relative;
+  min-height:58px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 18px;
+  font-size:20px;
+  font-weight:900;
+  color:var(--text);
+  cursor:pointer;
+  overflow:hidden;
+}
+
+.date-picker-field:focus-within,
+.date-picker-field:hover{
+  border-color:rgba(218,75,221,.35);
+  box-shadow:0 0 0 4px rgba(218,75,221,.08);
+}
+
+.date-picker-field input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+  border:0;
+}
+
+.date-picker-field span{
+  pointer-events:none;
+}
+
+.forecast-card-inline{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.forecast-card-inline > div,
+.forecast-strip > div{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:18px;
+  padding:12px 14px;
+}
+
+.forecast-card-inline span,
+.forecast-strip span{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:6px;
+  color:inherit;
+  opacity:.8;
+}
+
+.forecast-card-inline b,
+.forecast-strip strong{
+  font-size:18px;
+  font-weight:900;
+}
+
+.forecast-strip{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.projected-grid{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:2px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  vertical-align:middle;
+}
+
+.status-pill.realizado{
+  background:rgba(44,175,94,.12);
+  color:#1f9c50;
+}
+
+.status-pill.previsto{
+  background:rgba(230,155,16,.12);
+  color:#b56d00;
+}
+
+@media(max-width:900px){
+  .dialog[open]{
+    align-items:center;
+    padding:14px;
+  }
+
+  .dialog-card{
+    width:min(100%, calc(100vw - 28px));
+    max-height:calc(100dvh - 28px);
+  }
+
+  .forecast-card-inline,
+  .forecast-strip,
+  .projected-grid{
+    grid-template-columns:1fr;
+  }
+
+  .date-picker-field{
+    min-height:56px;
+    font-size:18px;
+  }
+}
+
+:root[data-theme="dark"] .date-picker-field{
+  background:#1A1A1A;
+  border-color:#2C2C2C;
+  color:#fff;
+}
+
+:root[data-theme="dark"] .forecast-strip > div,
+:root[data-theme="dark"] .forecast-card-inline > div{
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.08);
+}

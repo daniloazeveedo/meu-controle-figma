@@ -59,3 +59,8 @@ Estrutura principal:
 ## v4.6.1
 - aumentado o espaçamento entre colunas principais
 - card de boas-vindas com mais respiro entre conteúdo e botão Editar
+
+## v4.8.2
+- Mantida a base enviada pelo usuário com CSS/configurações da v4.6/v4.6.1.
+- Reaplicadas as alterações da v4.8: modal mobile sem empurrar a tela, calendário nativo, status Realizado/Previsto, gasto previsto e sobra prevista.
+- Refeito o app.js para remover duplicações de eventos e manter compatibilidade com os dados salvos no localStorage da versão v4.1/v4.6.
