@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0F0F0F" />
-  <title>Meu Controle Financeiro v4.8.3</title>
+  <title>Meu Controle Financeiro v4.8.4</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -347,6 +347,75 @@
 
       <button class="primary-action submit" type="submit">Salvar</button>
     </form>
+  </dialog>
+
+
+
+  <dialog id="transactionDetailDialog" class="dialog detail-dialog">
+    <div class="dialog-card transaction-detail-card">
+      <div class="detail-handle"></div>
+
+      <div class="detail-icon" id="detailIcon">
+        <img src="assets/icons/tag(1).svg" alt="" />
+      </div>
+
+      <h2 id="detailTitle">Lançamento</h2>
+      <strong class="detail-value" id="detailValue">R$ 0,00</strong>
+
+      <div class="detail-status-pill" id="detailStatusPill">Pendente</div>
+
+      <div class="detail-actions">
+        <button type="button" class="detail-action" id="detailDelete">
+          <img src="assets/icons/trash-2(1).svg" alt="" />
+          <span>Excluir</span>
+        </button>
+        <button type="button" class="detail-action" id="detailDuplicate">
+          <img src="assets/icons/copy(1).svg" alt="" />
+          <span>Duplicar</span>
+        </button>
+        <button type="button" class="detail-action" id="detailToggleStatus">
+          <img src="assets/icons/thumbs-down(1).svg" alt="" />
+          <span id="detailToggleStatusLabel">Não pago</span>
+        </button>
+        <button type="button" class="detail-action" id="detailEdit">
+          <img src="assets/icons/edit-pencil(1).svg" alt="" />
+          <span>Editar</span>
+        </button>
+      </div>
+
+      <div class="detail-info-grid">
+        <div>
+          <span>Data</span>
+          <strong id="detailDate">--/--/----</strong>
+        </div>
+        <div>
+          <span>Situação</span>
+          <strong id="detailSituation">Pendente</strong>
+        </div>
+        <div>
+          <span>Conta</span>
+          <strong>Nubank</strong>
+        </div>
+        <div>
+          <span>Categoria</span>
+          <strong id="detailCategory">Categoria</strong>
+        </div>
+        <div>
+          <span>Tags</span>
+          <button type="button">Adicionar</button>
+        </div>
+        <div>
+          <span>Observação</span>
+          <button type="button">Adicionar</button>
+        </div>
+        <div>
+          <span>Anexos</span>
+          <button type="button">Adicionar</button>
+        </div>
+      </div>
+
+      <button type="button" class="close-detail" data-close="transactionDetailDialog">Fechar</button>
+    </div>
   </dialog>
 
 

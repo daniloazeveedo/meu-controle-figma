@@ -71,3 +71,11 @@ Estrutura principal:
 - Na tela de lançamentos, o resumo agora alterna entre "Entradas e saídas" e "Previsto".
 - Mantido calendário nativo para escolher data.
 - Mantida lógica de Realizado/Previsto nos lançamentos.
+
+
+## v4.8.4
+- Ao clicar em um lançamento, abre a tela de detalhes.
+- Despesas mostram situação Pago / Não pago.
+- Receitas mostram situação Recebido / Não recebido.
+- Botão de status alterna entre realizado e previsto.
+- A tela de detalhes mostra data, conta, categoria, tags, observação e anexos.
