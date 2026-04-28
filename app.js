@@ -283,14 +283,6 @@ function renderTransactions(){
   if($('#monthExpenseValue')) $('#monthExpenseValue').textContent = maybe(selectedStats.expense);
   if($('#monthBalanceValue')) $('#monthBalanceValue').textContent = maybe(selectedStats.balance);
 
-  $('#detailToggleStatus')?.addEventListener('click', toggleSelectedTransactionStatus);
-  $('#detailDuplicate')?.addEventListener('click', duplicateSelectedTransaction);
-  $('#detailDelete')?.addEventListener('click', deleteSelectedTransaction);
-  $('#detailEdit')?.addEventListener('click', () => {
-    closeModal($('#transactionDetailDialog'));
-    openDialog('Despesa');
-  });
-
   $$('[data-summary-mode]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.summaryMode === summaryMode);
   });
@@ -324,8 +316,10 @@ function renderCategorySummary(){
 }
 
 function renderCategories(){
-  $('#categoryList').innerHTML = state.categories.map(cat => `
-    <div class="transaction-item" data-transaction-id="${t.id}">
+  const categoryList = $('#categoryList');
+  if(!categoryList) return;
+  categoryList.innerHTML = state.categories.map(cat => `
+    <div class="transaction-item">
       <div class="transaction-left">
         <div class="transaction-icon"><img src="assets/icons/${iconFor(cat)}" alt=""></div>
         <div class="transaction-title">${cat}</div>
@@ -333,6 +327,7 @@ function renderCategories(){
       <span class="muted">${state.transactions.filter(t => t.category === cat).length} lanç.</span>
     </div>`).join('');
 }
+
 
 function updateHideButtons(){
   $('#settingsHideValues')?.classList.toggle('on', state.hideValues);
@@ -608,14 +603,6 @@ function bindEvents(){
       if((state.themeMode || 'system') === 'system') applyTheme();
     });
   }
-  $('#detailToggleStatus')?.addEventListener('click', toggleSelectedTransactionStatus);
-  $('#detailDuplicate')?.addEventListener('click', duplicateSelectedTransaction);
-  $('#detailDelete')?.addEventListener('click', deleteSelectedTransaction);
-  $('#detailEdit')?.addEventListener('click', () => {
-    closeModal($('#transactionDetailDialog'));
-    openDialog('Despesa');
-  });
-
   $$('[data-summary-mode]').forEach(btn => {
     btn.addEventListener('click', () => {
       summaryMode = btn.dataset.summaryMode || 'realized';
