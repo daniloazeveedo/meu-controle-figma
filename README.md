@@ -66,10 +66,10 @@ Estrutura principal:
 - Refeito o app.js para remover duplicações de eventos e manter compatibilidade com os dados salvos no localStorage da versão v4.1/v4.6.
 
 
-## v4.8.6
-- Base: v4.8.2 estável enviada pelo usuário.
-- Tela inicial mantida sem gasto previsto e sem sobra prevista.
-- Ao clicar em um lançamento, abre a tela de detalhes.
-- Despesa alterna entre Pago e Não pago.
-- Receita alterna entre Recebido e Não recebido.
-- Mantido o calendário nativo e as configurações estáveis da v4.8.2.
+## v4.8.7
+- Base: v4.8.2 estável.
+- Removidos Entrada prevista, Saída prevista, Gasto previsto e Sobra prevista das telas principais.
+- Detalhe do lançamento ajustado sem ícones quebrados.
+- Status agora aparece como botão de texto:
+  - Despesa: Pago / Não pago.
+  - Receita: Recebido / Não recebido.

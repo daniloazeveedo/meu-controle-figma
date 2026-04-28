@@ -419,13 +419,6 @@ function openTransactionDetail(id){
   $('#detailCategory').textContent = transaction.category || 'Sem categoria';
   $('#detailToggleStatusLabel').textContent = transactionStatusButtonText(transaction);
 
-  const toggleIcon = $('#detailToggleStatus img');
-  if(toggleIcon) {
-    toggleIcon.src = transaction.status !== 'previsto'
-      ? 'assets/icons/thumbs-down(1).svg'
-      : 'assets/icons/thumbs-up(1).svg';
-  }
-
   openModal($('#transactionDetailDialog'));
 }
 
@@ -590,19 +583,8 @@ function bindEvents(){
   $('#detailDuplicate')?.addEventListener('click', duplicateSelectedTransaction);
   $('#detailDelete')?.addEventListener('click', deleteSelectedTransaction);
   $('#detailEdit')?.addEventListener('click', () => {
-    const transaction = state.transactions.find(t => t.id === selectedTransactionId);
-    if(!transaction) return;
     closeModal($('#transactionDetailDialog'));
-    openDialog(transaction.type);
-    const form = $('#transactionForm');
-    if(form){
-      form.description.value = transaction.description;
-      form.amount.value = transaction.amount;
-      if(form.category) form.category.value = transaction.category;
-      if(form.date) form.date.value = transaction.date;
-      if($('#transactionStatus')) $('#transactionStatus').value = transaction.status;
-      setDateDisplay(transaction.date);
-    }
+    openDialog('Despesa');
   });
 
   setupDatePicker();
