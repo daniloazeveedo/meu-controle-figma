@@ -25,6 +25,7 @@ let state = loadState();
 let currentFilter = "Todos";
 let currentMonth = getInitialMonth();
 let currentType = "Despesa";
+let selectedTransactionId = null;
 let lockedScrollY = 0;
 
 function cloneDefault(){
@@ -224,7 +225,7 @@ function transactionTemplate(t){
   const statusText = t.status === 'previsto' ? 'Previsto' : 'Realizado';
   const statusClass = t.status === 'previsto' ? 'previsto' : 'realizado';
   return `
-    <div class="transaction-item">
+    <div class="transaction-item" data-transaction-id="${t.id}">
       <div class="transaction-left">
         <div class="transaction-icon"><img src="assets/icons/${iconFor(t.category)}" alt=""></div>
         <div>
@@ -282,6 +283,10 @@ function renderTransactions(){
     saveState();
     render();
   }));
+  $$('[data-transaction-id]').forEach(item => {
+    item.addEventListener('click', () => openTransactionDetail(item.dataset.transactionId));
+  });
+
 }
 
 function renderCategorySummary(){
@@ -296,7 +301,9 @@ function renderCategorySummary(){
 }
 
 function renderCategories(){
-  $('#categoryList').innerHTML = state.categories.map(cat => `
+  const categoryList = $('#categoryList');
+  if(!categoryList) return;
+  categoryList.innerHTML = state.categories.map(cat => `
     <div class="transaction-item">
       <div class="transaction-left">
         <div class="transaction-icon"><img src="assets/icons/${iconFor(cat)}" alt=""></div>
@@ -374,6 +381,89 @@ function setupDatePicker(){
   input.addEventListener('change', () => setDateDisplay(input.value));
 }
 
+
+function transactionStatusText(t){
+  const done = t.status !== 'previsto';
+  if(t.type === 'Receita') return done ? 'Recebido' : 'Não recebido';
+  return done ? 'Pago' : 'Não pago';
+}
+
+function transactionStatusButtonText(t){
+  const done = t.status !== 'previsto';
+  if(t.type === 'Receita') return done ? 'Marcar não recebido' : 'Marcar recebido';
+  return done ? 'Marcar não pago' : 'Marcar pago';
+}
+
+function openTransactionDetail(id){
+  const transaction = state.transactions.find(t => t.id === id);
+  if(!transaction) return;
+
+  selectedTransactionId = id;
+
+  const sign = transaction.type === 'Receita' ? '+' : '-';
+  const detailIconImg = $('#detailIcon img');
+  if(detailIconImg) detailIconImg.src = `assets/icons/${iconFor(transaction.category)}`;
+
+  $('#detailTitle').textContent = transaction.description || 'Lançamento';
+  $('#detailValue').textContent = state.hideValues ? 'R$ ••••' : `${sign} ${brl(transaction.amount)}`;
+  $('#detailValue').classList.toggle('income', transaction.type === 'Receita');
+  $('#detailValue').classList.toggle('expense', transaction.type === 'Despesa');
+
+  const statusText = transactionStatusText(transaction);
+  $('#detailStatusPill').textContent = statusText;
+  $('#detailStatusPill').classList.toggle('done', transaction.status !== 'previsto');
+  $('#detailStatusPill').classList.toggle('pending', transaction.status === 'previsto');
+
+  $('#detailDate').textContent = formatDateMeta(transaction.date);
+  $('#detailSituation').textContent = statusText;
+  $('#detailCategory').textContent = transaction.category || 'Sem categoria';
+  $('#detailToggleStatusLabel').textContent = transactionStatusButtonText(transaction);
+
+  const toggleIcon = $('#detailToggleStatus img');
+  if(toggleIcon) {
+    toggleIcon.src = transaction.status !== 'previsto'
+      ? 'assets/icons/thumbs-down(1).svg'
+      : 'assets/icons/thumbs-up(1).svg';
+  }
+
+  openModal($('#transactionDetailDialog'));
+}
+
+function toggleSelectedTransactionStatus(){
+  const transaction = state.transactions.find(t => t.id === selectedTransactionId);
+  if(!transaction) return;
+
+  transaction.status = transaction.status === 'previsto' ? 'realizado' : 'previsto';
+  saveState();
+  render();
+  openTransactionDetail(transaction.id);
+}
+
+function duplicateSelectedTransaction(){
+  const transaction = state.transactions.find(t => t.id === selectedTransactionId);
+  if(!transaction) return;
+
+  const duplicate = {
+    ...transaction,
+    id: crypto.randomUUID(),
+    description: `${transaction.description} cópia`
+  };
+
+  state.transactions.push(duplicate);
+  saveState();
+  closeModal($('#transactionDetailDialog'));
+  render();
+}
+
+function deleteSelectedTransaction(){
+  if(!selectedTransactionId) return;
+  state.transactions = state.transactions.filter(t => t.id !== selectedTransactionId);
+  saveState();
+  selectedTransactionId = null;
+  closeModal($('#transactionDetailDialog'));
+  render();
+}
+
 function exportData(){
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -392,7 +482,7 @@ function bindEvents(){
   $$('[data-quick]').forEach(btn => btn.addEventListener('click', () => openDialog(btn.dataset.quick)));
 
   $$('[data-close]').forEach(btn => btn.addEventListener('click', () => closeModal(document.getElementById(btn.dataset.close))));
-  ['transactionDialog', 'profileDialog'].forEach(id => {
+  ['transactionDialog', 'profileDialog', 'transactionDetailDialog'].forEach(id => {
     const dialog = document.getElementById(id);
     if(!dialog) return;
     dialog.addEventListener('click', event => {
@@ -496,6 +586,25 @@ function bindEvents(){
       if((state.themeMode || 'system') === 'system') applyTheme();
     });
   }
+  $('#detailToggleStatus')?.addEventListener('click', toggleSelectedTransactionStatus);
+  $('#detailDuplicate')?.addEventListener('click', duplicateSelectedTransaction);
+  $('#detailDelete')?.addEventListener('click', deleteSelectedTransaction);
+  $('#detailEdit')?.addEventListener('click', () => {
+    const transaction = state.transactions.find(t => t.id === selectedTransactionId);
+    if(!transaction) return;
+    closeModal($('#transactionDetailDialog'));
+    openDialog(transaction.type);
+    const form = $('#transactionForm');
+    if(form){
+      form.description.value = transaction.description;
+      form.amount.value = transaction.amount;
+      if(form.category) form.category.value = transaction.category;
+      if(form.date) form.date.value = transaction.date;
+      if($('#transactionStatus')) $('#transactionStatus').value = transaction.status;
+      setDateDisplay(transaction.date);
+    }
+  });
+
   setupDatePicker();
 }
 

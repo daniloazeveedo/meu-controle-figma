@@ -64,3 +64,12 @@ Estrutura principal:
 - Mantida a base enviada pelo usuário com CSS/configurações da v4.6/v4.6.1.
 - Reaplicadas as alterações da v4.8: modal mobile sem empurrar a tela, calendário nativo, status Realizado/Previsto, gasto previsto e sobra prevista.
 - Refeito o app.js para remover duplicações de eventos e manter compatibilidade com os dados salvos no localStorage da versão v4.1/v4.6.
+
+
+## v4.8.6
+- Base: v4.8.2 estável enviada pelo usuário.
+- Tela inicial mantida sem gasto previsto e sem sobra prevista.
+- Ao clicar em um lançamento, abre a tela de detalhes.
+- Despesa alterna entre Pago e Não pago.
+- Receita alterna entre Recebido e Não recebido.
+- Mantido o calendário nativo e as configurações estáveis da v4.8.2.
