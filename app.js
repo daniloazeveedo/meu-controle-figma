@@ -334,7 +334,18 @@ function openDialog(type = "Despesa"){
   currentType = type;
   $("#transactionType").value = type;
   $$("[data-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.type === type));
-  $("#transactionDate").value = new Date().toISOString().slice(0,10);
+  const now = new Date();
+const isoDate = now.toISOString().slice(0,10);
+
+$("#transactionDate").value = isoDate;
+
+if ($("#transactionDateDisplay")) {
+  $("#transactionDateDisplay").value = now.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).replace(".", "");
+}
   $("#transactionDialog").showModal();
 }
 

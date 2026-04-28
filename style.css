@@ -1666,3 +1666,32 @@ input:focus,select:focus{
     display: none;
   }
 }
+
+@media (max-width: 900px) {
+  .dialog-card input#transactionDateDisplay {
+    display: block;
+    width: 100%;
+    height: 56px;
+    min-height: 56px;
+    line-height: 56px;
+    padding: 0 16px;
+    border-radius: 18px;
+    border: 1px solid #E5E6E5;
+    background: #FFFFFF;
+    color: #0F0F0F !important;
+    -webkit-text-fill-color: #0F0F0F !important;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+}
+
+:root[data-theme="dark"] .dialog-card input#transactionDateDisplay {
+  background: #232426 !important;
+  border-color: #34363A !important;
+  color: #F9FBF9 !important;
+  -webkit-text-fill-color: #F9FBF9 !important;
+}
