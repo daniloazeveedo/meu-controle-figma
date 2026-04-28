@@ -47,6 +47,24 @@ function maybe(value){
   return state.hideValues ? "R$ ••••" : brl(value);
 }
 
+function formatDateBR(date) {
+  return date.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
+}
+
+function parseDateBR(value) {
+  const clean = String(value || "").trim();
+
+  const match = clean.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!match) return null;
+
+  const [, day, month, year] = match;
+  return `${year}-${month}-${day}`;
+}
+
 
 function getActiveTheme(){
   if(state.themeMode === "dark") return "dark";
@@ -334,17 +352,13 @@ function openDialog(type = "Despesa"){
   currentType = type;
   $("#transactionType").value = type;
   $$("[data-type]").forEach(btn => btn.classList.toggle("active", btn.dataset.type === type));
-  const now = new Date();
+ const now = new Date();
 const isoDate = now.toISOString().slice(0,10);
 
 $("#transactionDate").value = isoDate;
 
 if ($("#transactionDateDisplay")) {
-  $("#transactionDateDisplay").value = now.toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
-  }).replace(".", "");
+  $("#transactionDateDisplay").value = formatDateBR(now);
 }
   $("#transactionDialog").showModal();
 }
@@ -378,6 +392,17 @@ $$("[data-type]").forEach(btn => {
 
 $("#transactionForm").addEventListener("submit", event => {
   event.preventDefault();
+
+  const displayDate = $("#transactionDateDisplay")?.value || "";
+  const parsedIsoDate = parseDateBR(displayDate);
+
+  if (!parsedIsoDate) {
+    alert("Informe a data no formato dd/mm/aaaa.");
+    return;
+  }
+
+  $("#transactionDate").value = parsedIsoDate;
+
   const fd = new FormData(event.target);
 
   state.transactions.push({

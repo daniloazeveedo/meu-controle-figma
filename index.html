@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -8,6 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="app">
     <aside class="sidebar">
@@ -58,7 +60,7 @@
       </header>
 
       <section class="screen active" id="dashboard">
-                <article class="user-welcome-card">
+        <article class="user-welcome-card">
           <div class="user-avatar" id="userAvatar">D</div>
           <div>
             <span id="welcomePeriod">Olá,</span>
@@ -68,7 +70,7 @@
           <button class="edit-user-btn" id="openProfileDialog">Editar</button>
         </article>
 
-<div class="dashboard-grid">
+        <div class="dashboard-grid">
           <article class="balance-card">
             <div class="balance-head">
               <span>Saldo disponível</span>
@@ -287,8 +289,10 @@
   </div>
 
   <nav class="mobile-nav">
-    <button class="active" data-screen="dashboard"><img src="assets/icons/home-3(1).svg" alt="" /><span>Início</span></button>
-    <button data-screen="transactions"><img src="assets/icons/note-with-text(1).svg" alt="" /><span>Lista</span></button>
+    <button class="active" data-screen="dashboard"><img src="assets/icons/home-3(1).svg"
+        alt="" /><span>Início</span></button>
+    <button data-screen="transactions"><img src="assets/icons/note-with-text(1).svg"
+        alt="" /><span>Lista</span></button>
     <button id="mobileAdd" class="mobile-add"><img src="assets/icons/plus(1).svg" alt="" /></button>
     <button data-screen="budget"><img src="assets/icons/briefcase(1).svg" alt="" /><span>Meta</span></button>
     <button data-screen="settings"><img src="assets/icons/settings-fill(1).svg" alt="" /><span>Ajustes</span></button>
@@ -324,7 +328,7 @@
 
       <label>Data
         <input name="date" type="hidden" id="transactionDate" required />
-        <input type="text" id="transactionDateDisplay" readonly required />
+        <input type="text" id="transactionDateDisplay" inputmode="numeric" placeholder="dd/mm/aaaa" required />
       </label>
 
       <button class="primary-action submit" type="submit">Salvar</button>
@@ -357,4 +361,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
