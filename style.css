@@ -1859,3 +1859,22 @@ body.modal-open{
   background:rgba(255,255,255,.04);
   border-color:rgba(255,255,255,.08);
 }
+
+/* Limpeza dos resumos previstos - versão estável */
+.forecast-card-inline,
+.forecast-strip,
+.projected-grid > div:nth-child(4),
+.projected-grid > div:nth-child(5),
+.projected-grid > div:nth-child(6) {
+  display: none !important;
+}
+
+.projected-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+@media (max-width: 900px) {
+  .projected-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
